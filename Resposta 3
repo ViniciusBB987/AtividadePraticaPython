@@ -1,0 +1,45 @@
+def bytes_to_mb(bytes):
+    # Função para converter bytes para megabytes
+    mb = bytes / (1024 ** 2)
+    return round(mb, 2)
+
+def calcular_percentual(total, espaco):
+    # Função para calcular o percentual de uso
+    percentual = (espaco / total) * 100
+    return round(percentual, 2)
+
+def main():
+    # Leitura do arquivo e armazenamento em memória
+    with open('usuarios.txt', 'r') as arquivo_entrada:
+        linhas = arquivo_entrada.readlines()
+
+    # Lista para armazenar os dados
+    usuarios = []
+
+    # Processamento dos dados e armazenamento na lista
+    for linha in linhas:
+        nome, espaco = linha.split()
+        espaco = int(espaco)
+        usuarios.append((nome, espaco))
+
+    # Ordena a lista pelo espaço ocupado em ordem decrescente
+    usuarios = sorted(usuarios, key=lambda x: x[1], reverse=True)
+
+    # Cálculo do espaço total ocupado
+    espaco_total = sum([usuario[1] for usuario in usuarios])
+
+    # Criação do relatório
+    with open('relatorio.txt', 'w') as arquivo_saida:
+        arquivo_saida.write("ACME Inc. Uso do espaço em disco pelos usuários\n")
+        arquivo_saida.write("-" * 70 + "\n")
+        arquivo_saida.write("{:<4} {:<15} {:<15} {:<10}\n".format("Nr.", "Usuário", "Espaço utilizado", "% do uso"))
+
+        for i, (nome, espaco) in enumerate(usuarios, start=1):
+            percentual = calcular_percentual(espaco_total, espaco)
+            arquivo_saida.write("{:<4} {:<15} {:<15} {:<10}\n".format(i, nome, f"{bytes_to_mb(espaco)} MB", f"{percentual}%"))
+
+        arquivo_saida.write("\nEspaço total ocupado: {} MB\n".format(bytes_to_mb(espaco_total)))
+        arquivo_saida.write("Espaço médio ocupado: {} MB\n".format(bytes_to_mb(espaco_total / len(usuarios))))
+
+if __name__ == "__main__":
+    main()
