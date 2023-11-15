@@ -1,0 +1,25 @@
+import re
+
+def validar_ip(ip):
+    padrao = re.compile(r'''
+        ^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$  # padrão para endereço IPv4
+    ''', re.VERBOSE)
+    
+    return padrao.match(ip) is not None
+
+def main():
+    # Lê o arquivo de entrada
+    with open('input.txt', 'r') as arquivo_entrada:
+        ips = arquivo_entrada.read().split()
+
+    # Separa os endereços válidos e inválidos
+    ips_validos = [ip for ip in ips if validar_ip(ip)]
+    ips_invalidos = [ip for ip in ips if not validar_ip(ip)]
+
+    # Escreve no arquivo de saída
+    with open('output.txt', 'w') as arquivo_saida:
+        arquivo_saida.write("[Endereços válidos:] " + " ".join(ips_validos) + "\n")
+        arquivo_saida.write("[Endereços inválidos:] " + " ".join(ips_invalidos) + "\n")
+
+if __name__ == "__main__":
+    main()
