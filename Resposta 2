@@ -1,0 +1,29 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Carregando a base de dados do Kaggle (substitua 'Digimon_dataset.csv' pelo nome real do seu arquivo)
+data = pd.read_csv('./datasets/DigiDB_digimonlist.csv')
+
+# Filtrando por Rookie e Champion e ordenando em ordem alfabética
+rookie_champion = data[data['Stage'].isin(['Rookie', 'Champion'])].sort_values(by='Digimon')
+
+# Filtrando por tipo e contando o número de Digimons de cada tipo
+type_counts = rookie_champion['Type'].value_counts()
+
+# Plotando gráficos
+fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+
+# Gráfico para 'Vaccine'
+type_counts.plot(kind='bar', ax=axs[0], color='skyblue')
+axs[0].set_title('Vaccine')
+
+# Gráfico para 'Virus'
+type_counts.plot(kind='bar', ax=axs[1], color='salmon')
+axs[1].set_title('Virus')
+
+# Gráfico para 'Other'
+type_counts.plot(kind='bar', ax=axs[2], color='lightgreen')
+axs[2].set_title('Other')
+
+plt.tight_layout()
+plt.show()
